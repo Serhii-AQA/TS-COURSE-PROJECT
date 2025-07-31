@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "test headed": "npx playwright test --headed"
+    "test:headed": "npx playwright test --headed"
   },
   "keywords": [],
   "author": "",
