@@ -8,6 +8,6 @@ test.describe('Login', () => {
         await page.getByRole('button', {name: 'Login'}).click();
         await expect(page).toHaveURL('https://practicesoftwaretesting.com/account');
         await expect(page.getByTestId('page-title')).toHaveText('My account');
-        await expect( page.getByTestId('nav-menu')).toHaveText('Jane Doe');
+        await expect(page.getByTestId('nav-menu')).toHaveText('Jane Doe');
     });
 });
