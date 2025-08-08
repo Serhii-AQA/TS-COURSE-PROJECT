@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "lint": "npx eslint . --fix",
+    "type-check": "tsc --noEmit",
     "test": "npx playwright test",
-    "test:headed": "npx playwright test --headed"
+    "test:headed": "npx playwright test --headed",
+    "report": "playwright show-report"
   },
   "keywords": [],
   "author": "",
@@ -19,5 +21,8 @@
     "eslint-plugin-playwright": "^2.2.2",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.39.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.1"
   }
 }
