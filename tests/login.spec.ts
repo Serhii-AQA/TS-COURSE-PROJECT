@@ -1,13 +1,21 @@
 import {expect, test} from "@playwright/test";
+import {baseConfig} from "../config/baseConfig";
+import {ApplicationPage} from "../pages/appPage";
 
 test.describe('Login', () => {
     test('Verify login with valid credentials', async ({ page }) => {
-        await page.goto('/auth/login');
-        await page.getByTestId('email').fill('customer@practicesoftwaretesting.com');
-        await page.getByTestId('password').fill('welcome01');
-        await page.getByRole('button', {name: 'Login'}).click();
+        const app = new ApplicationPage(page);
+
+        await app.login.navigateTo('/auth/login');
+        await app.login.loginAs(baseConfig.USER_EMAIL, baseConfig.USER_PASSWORD)
         await expect(page).toHaveURL('https://practicesoftwaretesting.com/account');
-        await expect(page.getByTestId('page-title')).toHaveText('My account');
-        await expect( page.getByTestId('nav-menu')).toHaveText('Jane Doe');
+
+        await expect(
+            app.account.title,
+            'Account page title is not visible',
+            ).toHaveText('My account');
+        await expect(app.account.header.accountName,
+            'User name is not visible',
+            ).toHaveText(baseConfig.USER_NAME);
     });
 });
