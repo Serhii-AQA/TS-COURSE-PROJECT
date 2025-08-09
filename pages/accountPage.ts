@@ -1,5 +1,5 @@
 import { Locator } from "playwright-core";
-import { HeaderComponent } from "./component/HeaderComponent";
+import { HeaderComponent } from "./component/headerComponent";
 import { BasePage } from "./basePage";
 
 export class AccountPage extends BasePage{
