@@ -1,15 +1,16 @@
 import {expect, test} from "@playwright/test";
-import {baseConfig} from "../config/baseConfig";
-import {ApplicationPage} from "../pages/appPage";
+// import {baseConfig} from "../config/baseConfig";
+import { USER_EMAIL, USER_PASSWORD, USER_NAME } from '../config/baseConfig';
+import {Application} from "../pages/appPage";
 
 test.describe('Login', () => {
     test.skip(!!process.env.CI, 'Test is skipped in CI due to the Cloudflare protection.');
 
     test('Verify login with valid credentials', async ({ page }) => {
-        const app = new ApplicationPage(page);
+        const app = new Application(page);
 
         await app.login.navigateTo('/auth/login');
-        await app.login.loginAs(baseConfig.USER_EMAIL, baseConfig.USER_PASSWORD)
+        await app.login.loginAs(USER_EMAIL, USER_PASSWORD)
         await expect(page).toHaveURL('https://practicesoftwaretesting.com/account');
 
         await expect(
@@ -18,6 +19,6 @@ test.describe('Login', () => {
             ).toHaveText('My account');
         await expect(app.account.header.accountName,
             'User name is not visible',
-            ).toHaveText(baseConfig.USER_NAME);
+            ).toHaveText(USER_NAME);
     });
 });

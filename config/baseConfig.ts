@@ -3,16 +3,7 @@ import { join } from 'path';
 
 dotenvConfig({ path: join(process.cwd(), '.env') });
 
-export const baseConfig: IBaseConfig = {
-    WEB_URL: process.env.WEB_URL!,
-    USER_EMAIL: process.env.USER_EMAIL!,
-    USER_PASSWORD: process.env.USER_PASSWORD!,
-    USER_NAME: process.env.USER_NAME!,
-};
-
-interface IBaseConfig {
-    WEB_URL: string;
-    USER_EMAIL: string;
-    USER_PASSWORD: string;
-    USER_NAME: string;
-}
+export const WEB_URL: string = process.env.WEB_URL!;
+export const USER_EMAIL: string = process.env.USER_EMAIL!;
+export const USER_PASSWORD: string = process.env.USER_PASSWORD!;
+export const USER_NAME: string = process.env.USER_NAME!;

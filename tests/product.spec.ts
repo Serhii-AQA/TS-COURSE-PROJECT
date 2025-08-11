@@ -1,10 +1,10 @@
 
 import {expect, test} from "@playwright/test";
-import {ApplicationPage} from "../pages/appPage";
+import {Application} from "../pages/appPage";
 
 test.describe('Products', () => {
     test('Verify user can view product details', async ({page}) => {
-        const app = new ApplicationPage(page);
+        const app = new Application(page);
         const productTitle = 'Combination Pliers';
 
         await app.home.navigateTo('/');
@@ -16,19 +16,19 @@ test.describe('Products', () => {
         await expect(page).toHaveURL(/.*\/product\/.*/);
 
         await expect(
-            app.productDetailsPage.productName,
+            app.productDetails.productName,
             'Product name is not visible',
         ).toHaveText(productDetails.title);
         await expect(
-            app.productDetailsPage.productPrice,
+            app.productDetails.productPrice,
             'Product price is not visible',
         ).toHaveText(productDetails.price);
         await expect(
-            app.productDetailsPage.addToCartButton,
+            app.productDetails.addToCartButton,
             'Add to cart button is not visible',
         ).toBeVisible();
         await expect(
-            app.productDetailsPage.addToFavoritesButton,
+            app.productDetails.addToFavoritesButton,
             'Add to favorites button is not visible',
         ).toBeVisible();
     });
