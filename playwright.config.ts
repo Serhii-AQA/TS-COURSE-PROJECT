@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { WEB_URL } from "./config/baseConfig";
 
 /**
  * Read environment variables from file.
@@ -26,12 +27,16 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'https://practicesoftwaretesting.com',
+    baseURL: WEB_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     testIdAttribute: 'data-test',
     headless: true,
+  },
+  timeout: 30_000,
+  expect: {
+    timeout: 15_000,
   },
 
   /* Configure projects for major browsers */
