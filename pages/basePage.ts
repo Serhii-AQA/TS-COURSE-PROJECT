@@ -1,4 +1,4 @@
-import {Page} from "playwright-core";
+import {Locator, Page} from "playwright-core";
 
 export abstract class BasePage {
     protected readonly page: Page;
@@ -11,5 +11,10 @@ export abstract class BasePage {
         await this.page.goto(url, {
             waitUntil: 'load',
         });
+    }
+
+    async getTextElement(locator: Locator): Promise<string> {
+        await locator.waitFor({ state: 'visible' });
+        return await locator.innerText();
     }
 }
