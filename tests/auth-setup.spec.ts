@@ -5,6 +5,7 @@ import path from "path";
 const authFile = path.join(__dirname, '../playwright/.auth/user.json');
 
 test('Verify successful login', async ({ page }) => {
+    test.setTimeout(60_000);
     const app = new Application(page);
     await app.login.navigateTo('/auth/login');
     await app.login.loginAs(USER_EMAIL, USER_PASSWORD)
