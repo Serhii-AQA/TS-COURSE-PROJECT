@@ -9,28 +9,49 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    env: # Прокидуємо змінні в ENV з GitHub Secrets
+    env: # Прокидуємо змінні з GitHub Secrets
       WEB_URL: ${{ secrets.WEB_URL }}
       USER_EMAIL: ${{ secrets.USER_EMAIL }}
       USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
       USER_NAME: ${{ secrets.USER_NAME }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+
       - name: Install dependencies
         run: npm ci
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+
+      - name: Check required environment variables
+        run: |
+          required_vars=(WEB_URL USER_EMAIL USER_PASSWORD USER_NAME)
+          missing_vars=()
+          for var in "${required_vars[@]}"; do
+            if [ -z "${!var}" ]; then
+              missing_vars+=("$var")
+            fi
+          done
+
+          if [ ${#missing_vars[@]} -ne 0 ]; then
+            echo "❌ Missing required environment variables: ${missing_vars[*]}"
+            exit 1
+          fi
+
       - name: Create .env file from secrets
         run: |
           echo "WEB_URL=${WEB_URL}" >> .env
           echo "USER_EMAIL=${USER_EMAIL}" >> .env
           echo "USER_PASSWORD=${USER_PASSWORD}" >> .env
           echo "USER_NAME=${USER_NAME}" >> .env
+
       - name: Run Playwright tests
         run: npx playwright test
+
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
