@@ -10,7 +10,13 @@ setup('Authenticate and save token', async ({ browser, request }) => {
             email: USER_EMAIL,
             password: USER_PASSWORD,
         },
+        headers: {
+            'Content-Type': 'application/json',
+        },
+
     });
+    res.status();
+    await res.text();
 
     expect(res.status()).toBe(200);
 
