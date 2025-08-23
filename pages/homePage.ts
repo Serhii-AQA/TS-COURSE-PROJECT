@@ -10,7 +10,7 @@ export class HomePage extends BasePage {
 
     async openProduct(productName: string): Promise<void> {
         await this.productsCard.filter({ hasText: productName }).first().click();
-    }
+    };
 
     async getProductDetails(productName: string): Promise<{
         title: string;
@@ -24,13 +24,13 @@ export class HomePage extends BasePage {
             title: productTitle,
             price: productPrice.replace('$', '').trim(),
         };
-    }
+    };
 
     async selectSortBy (value: string) {
         await this.sortDD.click();
         await this.sortDD.selectOption(`${value}`);
         await this.page.waitForLoadState('networkidle');
-    }
+    };
 
     async getProductsSorted(productName: Locator, order: 'asc' | 'desc') {
         const productNames: string[] = await productName.allTextContents();
@@ -40,10 +40,10 @@ export class HomePage extends BasePage {
             sorted.reverse();
         }
         return sorted;
-    }
+    };
 
     async selectCategoryCheckbox (name: string) {
         await this.page.getByRole('checkbox', {name: `${name}`}).check();
         await this.page.waitForLoadState('networkidle');
-    }
+    };
 }

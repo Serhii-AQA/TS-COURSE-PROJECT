@@ -1,11 +1,12 @@
 import {USER_EMAIL, USER_PASSWORD, WEB_URL} from '../config/baseConfig';
 import path from "path";
 import {expect, test as setup} from '@playwright/test';
+import {Url} from "../constants/url";
 
 const authFile = path.join(__dirname, '../playwright/.auth/user.json');
 
 setup('Authenticate and save token', async ({ browser, request }) => {
-    const res = await request.post('https://api.practicesoftwaretesting.com/users/login', {
+    const res = await request.post(Url.ApiLogin, {
         data: {
             email: USER_EMAIL,
             password: USER_PASSWORD,

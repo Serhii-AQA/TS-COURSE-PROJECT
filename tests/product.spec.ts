@@ -2,14 +2,16 @@
 import {expect, test} from "@playwright/test";
 import {Application} from "../pages/app";
 import {SortValueEnum, SortTypeEnum} from "../constants/sort";
-import {CategoryOtherEnum} from "../constants/Categories";
+import {CategoryOtherEnum} from "../constants/categories";
+import {waitForApiStatus} from "../utils/apiUtils";
+import {Url} from "../constants/url";
 
 test.describe('Products', () => {
     test('Verify user can view product details', async ({page}) => {
         const app = new Application(page);
         const productTitle = 'Combination Pliers';
 
-        await app.homePage.navigateTo('/');
+        await app.homePage.navigateTo(Url.Home);
         await expect(app.homePage.productsCard).not.toHaveCount(0);
 
         const productDetails: {title: string, price: string} = await app.homePage.getProductDetails(productTitle);
@@ -40,7 +42,7 @@ test.describe('Products', () => {
         const productName: string = 'Slip Joint Pliers';
         const textAllert: string = 'Product added to shopping cart.';
 
-        await app.homePage.navigateTo('/');
+        await app.homePage.navigateTo(Url.Home);
         const productDetails: {title: string, price: string} = await app.homePage.getProductDetails(productName);
         await app.homePage.openProduct(productName);
         await expect(page).toHaveURL(/^https:\/\/practicesoftwaretesting.com\/product/);
@@ -54,7 +56,7 @@ test.describe('Products', () => {
         await expect(app.productDetailsPage.headerComponent.cartItem,'Count to cart  is not 1').toHaveText('1', { useInnerText: true });
 
         await app.productDetailsPage.headerComponent.cartItem.click()
-        await expect(page).toHaveURL('https://practicesoftwaretesting.com/checkout');
+        await expect(page).toHaveURL(Url.Checkout);
         await expect(app.checkoutPage.productQuantityField).toHaveValue('1');
         await expect(app.checkoutPage.productTitle).toHaveText(productDetails.title);
         await expect(app.checkoutPage.proceedToCheckoutButton).toBeVisible();
@@ -72,15 +74,12 @@ test.describe('Products', () => {
     ]
 
     for(const testData of  sortNameData) {
-        test(`Verify user can perform sorting by name ${testData.name}`, async ({page}) => {
+        test(`Verify user can perform sorting by name ${testData.name}`, async ({page, request}) => {
             const app = new Application(page);
 
-            await app.homePage.navigateTo('/');
-
-            await Promise.all([
-                page.waitForResponse(res => res.url().includes('/products') && res.status() === 200),
-                app.homePage.selectSortBy(testData.value),
-            ]);
+            await app.homePage.navigateTo(Url.Home);
+            await app.homePage.selectSortBy(testData.value);
+            await waitForApiStatus(request, Url.Products);
 
             const sortingProducts: string[] = await app.homePage.getProductsSorted(app.homePage.productName, testData.name);
             await expect(app.homePage.productName).toHaveText(sortingProducts);
@@ -99,16 +98,12 @@ test.describe('Products', () => {
     ]
 
     for(const testData of  sortPriceData) {
-        test(`Verify user can perform sorting by price ${testData.name}`, async ({page}) => {
+        test(`Verify user can perform sorting by price ${testData.name}`, async ({page, request}) => {
             const app = new Application(page);
 
-            await app.homePage.navigateTo('/');
-
-            await Promise.all([
-                page.waitForResponse(res => res.url().includes('/products') && res.status() === 200),
-                app.homePage.selectSortBy(testData.value),
-            ]);
-
+            await app.homePage.navigateTo(Url.Home);
+            await app.homePage.selectSortBy(testData.value);
+            await waitForApiStatus(request, Url.Products);
             const sortingProducts: string[] = await app.homePage.getProductsSorted(app.homePage.productPrice, testData.name);
             await expect(app.homePage.productPrice).toHaveText(sortingProducts);
         });
@@ -117,7 +112,7 @@ test.describe('Products', () => {
     test('Verify user can filter products by category', async ({page}) => {
         const app = new Application(page);
 
-        await app.homePage.navigateTo('/');
+        await app.homePage.navigateTo(Url.Home);
         await app.homePage.selectCategoryCheckbox(CategoryOtherEnum.SANDER);
         const productNames: string[] = await app.homePage.productName.allTextContents();
         expect(productNames.every(name => name.includes(CategoryOtherEnum.SANDER))).toBeTruthy();
