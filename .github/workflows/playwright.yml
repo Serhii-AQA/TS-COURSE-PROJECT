@@ -30,5 +30,5 @@ jobs:
           USER_EMAIL: ${{ secrets.USER_EMAIL }}
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
           USER_NAME: ${{ secrets.USER_NAME }}
-          WEB_URL: ${{ vars.WEB_URL }}
+          WEB_URL: ${{ secrets.WEB_URL }}
         run: npx playwright test
