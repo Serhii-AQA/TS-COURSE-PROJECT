@@ -1,4 +1,5 @@
 import { expect, APIRequestContext } from "@playwright/test";
+import {Url} from "../constants/url";
 
 // export async function waitForApiStatus(request: APIRequestContext, url: string, expectedStatus: number = 200) {
 //     await expect.poll(async () => {
@@ -26,14 +27,10 @@ import { expect, APIRequestContext } from "@playwright/test";
 
 
 export async function waitForApiStatus(request: APIRequestContext, endpoint: string, expectedStatus: number = 200) {
-    const url = `${process.env.WEB_URL}${endpoint}`;
+    const url = `${Url.ApiBase}${endpoint}`;
+    console.log('url -------> ', url)
     await expect.poll(async () => {
-        const response = await request.get(url, {
-            headers: {
-                // якщо потрібна авторизація
-                // Authorization: `Bearer ${process.env.API_TOKEN}`,
-            },
-        });
+        const response = await request.get(url);
         return response.status();
     }, {
         message: `API ${url} didn't return status ${expectedStatus}`,
