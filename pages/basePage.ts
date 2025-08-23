@@ -1,20 +1,18 @@
-import {Locator, Page} from "playwright-core";
+import { Page} from "playwright-core";
+import {HeaderComponent} from "./component/headerComponent";
 
 export abstract class BasePage {
     protected readonly page: Page;
+    readonly headerComponent: HeaderComponent;
 
     constructor(page: Page) {
         this.page = page;
+        this.headerComponent = new HeaderComponent(this.page);
     }
 
     async navigateTo(url: string = '/') {
         await this.page.goto(url, {
             waitUntil: 'load',
         });
-    }
-
-    async getTextElement(locator: Locator): Promise<string> {
-        await locator.waitFor({ state: 'visible' });
-        return await locator.innerText();
     }
 }

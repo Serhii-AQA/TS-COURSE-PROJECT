@@ -3,25 +3,22 @@ import {LoginPage} from "./loginPage";
 import {AccountPage} from "./accountPage";
 import {HomePage} from "./homePage";
 import {ProductDetailsPage} from "./productDetailsPage";
-import {HeaderComponent} from "./component/headerComponent";
 import {CheckoutPage} from "./checkoutPage";
 
 export class Application {
     private readonly page: Page;
-    readonly home: HomePage;
-    readonly login: LoginPage;
-    readonly account: AccountPage;
-    readonly productDetails: ProductDetailsPage;
-    readonly header: HeaderComponent;
-    readonly checkout: CheckoutPage;
+    readonly homePage: HomePage;
+    readonly loginPage: LoginPage;
+    readonly accountPage: AccountPage;
+    readonly productDetailsPage: ProductDetailsPage;
+    readonly checkoutPage: CheckoutPage;
 
     constructor(page: Page) {
         this.page = page;
-        this.home = new HomePage(this.page);
-        this.login = new LoginPage(this.page);
-        this.account = new AccountPage(this.page);
-        this.productDetails = new ProductDetailsPage(this.page);
-        this.header = new HeaderComponent(this.page);
-        this.checkout = new CheckoutPage(this.page);
+        this.homePage = new HomePage(this.page);
+        this.loginPage = new LoginPage(this.page);
+        this.accountPage = new AccountPage(this.page);
+        this.productDetailsPage = new ProductDetailsPage(this.page);
+        this.checkoutPage = new CheckoutPage(this.page);
     }
 }

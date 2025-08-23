@@ -43,7 +43,7 @@ export class HomePage extends BasePage {
     }
 
     async selectCategoryCheckbox (name: string) {
-        await this.page.getByRole('checkbox', {name: `${name}`}).click();
+        await this.page.getByRole('checkbox', {name: `${name}`}).check();
         await this.page.waitForLoadState('networkidle');
     }
 }
