@@ -1,4 +1,4 @@
-import {Locator, Page} from "playwright-core";
+import { Locator, Page } from 'playwright-core';
 
 export class HeaderComponent {
     readonly page: Page;
@@ -10,6 +10,6 @@ export class HeaderComponent {
         this.page = page;
         this.accountName = this.page.getByTestId('nav-menu');
         this.cartItem = this.page.getByTestId('nav-cart');
-        this.categoriesDD = this.page.getByRole('button', {name: 'Categories'});
+        this.categoriesDD = this.page.getByRole('button', { name: 'Categories' });
     }
 }

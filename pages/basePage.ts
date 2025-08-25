@@ -1,6 +1,6 @@
-import { Page} from "playwright-core";
-import {HeaderComponent} from "./component/headerComponent";
-import {WebRoutes} from "../constants/webRoutes";
+import { Page } from 'playwright-core';
+import { HeaderComponent } from './component/headerComponent';
+import { WebRoutes } from '../constants/webRoutes';
 
 export abstract class BasePage {
     protected readonly page: Page;

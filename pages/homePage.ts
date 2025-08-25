@@ -1,5 +1,5 @@
-import { BasePage } from "./basePage";
-import { Locator } from "playwright-core";
+import { BasePage } from './basePage';
+import { Locator } from 'playwright-core';
 
 export class HomePage extends BasePage {
     readonly productsCard: Locator = this.page.getByTestId(/product/);
@@ -43,7 +43,7 @@ export class HomePage extends BasePage {
     };
 
     async selectCategoryCheckbox (name: string) {
-        await this.page.getByRole('checkbox', {name: `${name}`}).check();
+        await this.page.getByRole('checkbox', { name: `${name}` }).check();
         await this.page.waitForLoadState('networkidle');
     };
 }

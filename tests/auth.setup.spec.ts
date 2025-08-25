@@ -1,8 +1,8 @@
-import {USER_EMAIL, USER_PASSWORD, WEB_URL} from '../config/baseConfig';
-import path from "path";
-import {expect, test as setup} from '@playwright/test';
-import {WebRoutes} from "../constants/webRoutes";
-import {ApiEndpoints} from "../constants/apiEndpoints";
+import { USER_EMAIL, USER_PASSWORD, WEB_URL } from '../config/baseConfig';
+import path from 'path';
+import { expect, test as setup } from '@playwright/test';
+import { WebRoutes } from '../constants/webRoutes';
+import { ApiEndpoints } from '../constants/apiEndpoints';
 
 const authFile = path.join(__dirname, '../playwright/.auth/user.json');
 
@@ -17,8 +17,6 @@ setup('Authenticate and save token', async ({ browser, request }) => {
         },
 
     });
-    res.status();
-    await res.text();
 
     expect(res.status()).toBe(200);
 

@@ -1,5 +1,5 @@
-import {BasePage} from "./basePage";
-import {Locator} from "playwright-core";
+import { BasePage } from './basePage';
+import { Locator } from 'playwright-core';
 
 export class CheckoutPage extends BasePage {
     readonly productQuantityField: Locator = this.page.getByTestId('product-quantity');

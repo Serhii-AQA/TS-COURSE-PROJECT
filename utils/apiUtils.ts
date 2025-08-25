@@ -1,5 +1,5 @@
-import { expect, APIRequestContext } from "@playwright/test";
-import {ApiEndpoints} from "../constants/apiEndpoints";
+import { expect, APIRequestContext } from '@playwright/test';
+import { ApiEndpoints } from '../constants/apiEndpoints';
 
 export async function waitForApiStatus(request: APIRequestContext, endpoint: string, expectedStatus: number = 200) {
     const url = `${ApiEndpoints.ApiBase}${endpoint}`;
