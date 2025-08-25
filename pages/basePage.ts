@@ -1,6 +1,6 @@
 import { Page} from "playwright-core";
 import {HeaderComponent} from "./component/headerComponent";
-import {Url} from "../constants/url";
+import {WebRoutes} from "../constants/webRoutes";
 
 export abstract class BasePage {
     protected readonly page: Page;
@@ -11,7 +11,7 @@ export abstract class BasePage {
         this.headerComponent = new HeaderComponent(this.page);
     }
 
-    async navigateTo(url: string = Url.Home) {
+    async navigateTo(url: string = WebRoutes.Home) {
         await this.page.goto(url, {
             waitUntil: 'load',
         });
