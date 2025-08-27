@@ -6,7 +6,7 @@ import { waitForApiStatus } from '../utils/apiUtils';
 import { WebRoutes } from '../constants/webRoutes';
 
 test.describe('Products', () => {
-    test('Verify user can view product details', async ({ app, apiLogIn }) => {
+    test('Verify user can view product details', async ({ app }) => {
         const productTitle = 'Combination Pliers';
 
         await app.homePage.navigateTo(WebRoutes.Home);
@@ -33,7 +33,6 @@ test.describe('Products', () => {
             app.productDetailsPage.addToFavoritesButton,
             'Add to favorites button is not visible',
         ).toBeVisible();
-        await app.page.pause();
     });
 
     test('Verify user can add product to cart', async ({ app }) => {

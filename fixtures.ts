@@ -1,8 +1,11 @@
-import { test as base, expect } from '@playwright/test';
+import { test as base } from '@playwright/test';
 import { Application } from './pages/app';
-import { ApiEndpoints } from './constants/apiEndpoints';
-import { WebRoutes } from './constants/webRoutes';
-import { USER_EMAIL, USER_PASSWORD, WEB_URL } from './config/baseConfig';
+import {  WEB_URL } from './config/baseConfig';
+import path from 'path';
+import fs from 'fs';
+
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 type MyFixtures = {
     app: Application;
@@ -15,21 +18,9 @@ export const test = base.extend<MyFixtures>({
         await use(app);
     },
 
-    apiLogIn: async ({ browser, request }, use) => {
-        const res = await request.post(`${ApiEndpoints.ApiBase}${WebRoutes.UsersLogin}`, {
-            data: {
-                email: USER_EMAIL,
-                password: USER_PASSWORD,
-            },
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        expect(res.status()).toBe(200);
-        const body = await res.json();
-        const token = body?.access_token || body?.token;
-        expect(token).toBeTruthy();
+    apiLogIn: async ({ browser }, use) => {
+        const authFile = path.join(__dirname, './playwright/.auth/user.json');
+        const { token } = JSON.parse(fs.readFileSync(authFile, 'utf-8'));
 
         const page = await browser.newPage();
         await page.goto(WEB_URL);
@@ -40,6 +31,6 @@ export const test = base.extend<MyFixtures>({
         const app = new Application(page);
         await use(app);
 
-        await page.close();
+        await app.page.close();
     },
 });

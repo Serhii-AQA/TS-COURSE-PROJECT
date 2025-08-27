@@ -8,9 +8,13 @@ export class HomePage extends BasePage {
     readonly productLocator = (productName: string) =>  this.productsCard.filter({ hasText: productName });
     readonly sortDD: Locator = this.page.getByTestId('sort');
 
-    async openProduct(productName: string): Promise<void> {
-        await this.productsCard.filter({ hasText: productName }).first().click();
-    };
+    async openProduct(param: string | number): Promise<void> {
+        if (typeof param === 'string') {
+            await this.productsCard.filter({ hasText: param }).first().click();
+        } else {
+            await this.productsCard.nth(param).click();
+        }
+    }
 
     async getProductDetails(productName: string): Promise<{
         title: string;

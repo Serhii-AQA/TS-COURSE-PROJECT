@@ -7,4 +7,13 @@ export class ProductDetailsPage extends BasePage {
     readonly addToCartButton: Locator = this.page.getByTestId('add-to-cart');
     readonly addToFavoritesButton: Locator = this.page.getByTestId('add-to-favorites');
     readonly productAddedAlertMessage: Locator = this.page.getByRole('alert', { name: 'Product added to shopping cart.' });
+
+    async getProductInfo() {
+        const productTitle: string = await this.productName.innerText();
+        const productPrice: string = await this.productPrice.innerText();
+        return {
+            title: productTitle,
+            price: productPrice,
+        };
+    };
 }

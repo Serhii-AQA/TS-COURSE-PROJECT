@@ -1,36 +1,30 @@
-import { USER_EMAIL, USER_PASSWORD, WEB_URL } from '../config/baseConfig';
+import { USER_EMAIL, USER_PASSWORD } from '../config/baseConfig';
 import path from 'path';
 import { expect, test as setup } from '@playwright/test';
 import { WebRoutes } from '../constants/webRoutes';
 import { ApiEndpoints } from '../constants/apiEndpoints';
+import fs from 'fs';
 
 const authFile = path.join(__dirname, '../playwright/.auth/user.json');
 
-setup('Authenticate and save token', async ({ browser, request }) => {
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable playwright/no-standalone-expect */
+
+setup('Authenticate and save token', async ({ request }) => {
     const res = await request.post(`${ApiEndpoints.ApiBase}${WebRoutes.UsersLogin}`, {
         data: {
             email: USER_EMAIL,
             password: USER_PASSWORD,
-        },
-        headers: {
-            'Content-Type': 'application/json',
-        },
-
+        }
     });
 
     expect(res.status()).toBe(200);
 
     const body = await res.json();
-    const token = body?.access_token || body?.token;
+    const token = body.access_token;
     expect(token).toBeTruthy();
 
-    const page = await browser.newPage();
-    await page.goto(WEB_URL);
-
-    await page.evaluate((token) => {
-        localStorage.setItem('auth-token', token);
-    }, token);
-
-    await page.context().storageState({ path: authFile });
-    await page.close();
+    fs.mkdirSync(path.dirname(authFile), { recursive: true });
+    fs.writeFileSync(authFile, JSON.stringify({ token }, null, 2));
 });
