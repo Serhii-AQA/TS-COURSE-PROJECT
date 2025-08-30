@@ -1,5 +1,5 @@
-import { BasePage } from "./basePage";
-import { Locator } from "playwright-core";
+import { BasePage } from './basePage';
+import { Locator } from 'playwright-core';
 
 export class HomePage extends BasePage {
     readonly productsCard: Locator = this.page.getByTestId(/product/);
@@ -8,9 +8,12 @@ export class HomePage extends BasePage {
     readonly productLocator = (productName: string) =>  this.productsCard.filter({ hasText: productName });
     readonly sortDD: Locator = this.page.getByTestId('sort');
 
-    async openProduct(productName: string): Promise<void> {
-        await this.productsCard.filter({ hasText: productName }).first().click();
-    };
+    async openProduct(param: string | number): Promise<void> {
+        const product = typeof param === 'string'
+            ? this.productsCard.filter({ hasText: param }).first()
+            : this.productsCard.nth(param);
+        await product.click();
+    }
 
     async getProductDetails(productName: string): Promise<{
         title: string;
@@ -43,7 +46,7 @@ export class HomePage extends BasePage {
     };
 
     async selectCategoryCheckbox (name: string) {
-        await this.page.getByRole('checkbox', {name: `${name}`}).check();
+        await this.page.getByRole('checkbox', { name: `${name}` }).check();
         await this.page.waitForLoadState('networkidle');
     };
 }

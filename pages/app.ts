@@ -1,12 +1,12 @@
-import {Page} from "playwright-core";
-import {LoginPage} from "./loginPage";
-import {AccountPage} from "./accountPage";
-import {HomePage} from "./homePage";
-import {ProductDetailsPage} from "./productDetailsPage";
-import {CheckoutPage} from "./checkoutPage";
+import { Page } from 'playwright-core';
+import { LoginPage } from './loginPage';
+import { AccountPage } from './accountPage';
+import { HomePage } from './homePage';
+import { ProductDetailsPage } from './productDetailsPage';
+import { CheckoutPage } from './checkoutPage';
 
 export class Application {
-    private readonly page: Page;
+    readonly page: Page;
     readonly homePage: HomePage;
     readonly loginPage: LoginPage;
     readonly accountPage: AccountPage;
