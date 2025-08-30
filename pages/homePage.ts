@@ -9,11 +9,10 @@ export class HomePage extends BasePage {
     readonly sortDD: Locator = this.page.getByTestId('sort');
 
     async openProduct(param: string | number): Promise<void> {
-        if (typeof param === 'string') {
-            await this.productsCard.filter({ hasText: param }).first().click();
-        } else {
-            await this.productsCard.nth(param).click();
-        }
+        const product = typeof param === 'string'
+            ? this.productsCard.filter({ hasText: param }).first()
+            : this.productsCard.nth(param);
+        await product.click();
     }
 
     async getProductDetails(productName: string): Promise<{

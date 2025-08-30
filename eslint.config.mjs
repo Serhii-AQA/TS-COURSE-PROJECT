@@ -1,6 +1,3 @@
-// @ts-check
-
-import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import playwright from 'eslint-plugin-playwright';
 import globals from 'globals';
@@ -13,14 +10,12 @@ export default tseslint.config(
     { languageOptions: { globals: globals.browser } },
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
-    eslint.configs.recommended,
     tseslint.configs.recommendedTypeChecked,
     {
         ignores: [
             '**/node_modules',
             '**/test-results/',
             'playwright-report/',
-            'tests/sandbox.test.ts',
             'utils/gmailAuth.util.ts',
             'utils/slack-nnotification.util.ts',
             'test-data/marketplace/hoteliersData.ts',

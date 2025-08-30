@@ -47,9 +47,9 @@ test.describe('Products', () => {
         await expect(app.productDetailsPage.productPrice, 'Product price is not visible').toHaveText(productDetails.price);
 
         await app.productDetailsPage.addToCartButton.click();
-        await expect(app.productDetailsPage.productAddedAlertMessage).toBeVisible();
-        await expect(app.productDetailsPage.productAddedAlertMessage).toHaveText(textAllert, { useInnerText: true });
-        await expect(app.productDetailsPage.productAddedAlertMessage).not.toBeVisible({ timeout: 8_000 });
+        await expect(app.productDetailsPage.alertsComponent.productAddedAlert).toBeVisible();
+        await expect(app.productDetailsPage.alertsComponent.productAddedAlert).toHaveText(textAllert, { useInnerText: true });
+        await expect(app.productDetailsPage.alertsComponent.productAddedAlert).not.toBeVisible({ timeout: 8_000 });
         await expect(app.productDetailsPage.headerComponent.cartItem,'Count to cart  is not 1').toHaveText('1', { useInnerText: true });
 
         await app.productDetailsPage.headerComponent.cartItem.click();
