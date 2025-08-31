@@ -5,6 +5,7 @@ import { CategoryOtherEnum } from '../constants/categories';
 import { waitForApiStatus } from '../utils/apiUtils';
 import { WebRoutes } from '../constants/webRoutes';
 import { ApiEndpoints } from '../constants/apiEndpoints';
+import { mockProductsResponse } from '../utils/mockUtils';
 
 test.describe('Products', () => {
     test('Verify user can view product details', async ({ app }) => {
@@ -110,24 +111,13 @@ test.describe('Products', () => {
         expect(productNames.every(name => name.includes(CategoryOtherEnum.SANDER))).toBeTruthy();
     });
 
-    test.only('Verify mock response with 20-th products', async ({ app }) => {
-
-        await app.page.route(`${ApiEndpoints.ApiBase}${WebRoutes.Products}?page=1&between=price,1,100`, async route => {
-            const response = await route.fetch();
-            const json = await response.json();
-            json.data = json.data.slice(0,20)
-
-            // json.push({ name: 'Loquat', id: 100 });
-            // Fulfill using the original response, while patching the response body
-            // with the given JSON object.
-            await route.fulfill({ response, json });
-        });
-
-
+    test('Verify mock response with 20-th products', async ({ app }) => {
+        await app.page.route(
+            `${ApiEndpoints.ApiBase}${WebRoutes.Products}*`,
+            mockProductsResponse
+        );
 
         await app.homePage.navigateTo(WebRoutes.Home);
-        await expect(app.homePage.productsCard).toHaveCount(20);
-
+        await expect(app.homePage.productName).toHaveCount(20);
     });
-
 });
