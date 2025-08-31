@@ -41,21 +41,21 @@ export class CheckoutPage extends BasePage {
         await this.paymentMethodDD.selectOption(value);
     }
 
-    async fillBillingAddress(BillingAddress: BillingAddress): Promise<void> {
+    async fillBillingAddress(billingAddress: BillingAddress): Promise<void> {
         await this.streetField.clear();
-        await this.streetField.fill(BillingAddress.street);
+        await this.streetField.fill(billingAddress.street);
 
         await this.cityField.clear();
-        await this.cityField.fill(BillingAddress.city);
+        await this.cityField.fill(billingAddress.city);
 
         await this.stateField.clear();
-        await this.stateField.fill(BillingAddress.state);
+        await this.stateField.fill(billingAddress.state);
 
         await this.countryField.clear();
-        await this.countryField.fill(BillingAddress.country);
+        await this.countryField.fill(billingAddress.country);
 
         await this.postcodeField.clear();
-        await this.postcodeField.fill(BillingAddress.postcode);
+        await this.postcodeField.fill(billingAddress.postcode);
     }
     async fillPaymentData(PaymentFields: PaymentFields): Promise<void> {
         await this.creditCardNumberField.fill(PaymentFields.creditCardNumber);
