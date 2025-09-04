@@ -4,8 +4,9 @@ import {  WEB_URL } from './config/baseConfig';
 import path from 'path';
 import fs from 'fs';
 
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+type AuthData = {
+    token: string;
+};
 
 type MyFixtures = {
     app: Application;
@@ -20,7 +21,10 @@ export const test = base.extend<MyFixtures>({
 
     apiLogIn: async ({ browser }, use) => {
         const authFile = path.join(__dirname, './playwright/.auth/user.json');
-        const { token } = JSON.parse(fs.readFileSync(authFile, 'utf-8'));
+        const fileContent = fs.readFileSync(authFile, 'utf-8');
+        const parsed: AuthData = JSON.parse(fileContent) as AuthData;
+
+        const { token } = parsed;
 
         const page = await browser.newPage();
         await page.goto(WEB_URL);

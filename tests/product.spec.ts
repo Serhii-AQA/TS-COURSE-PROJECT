@@ -4,6 +4,8 @@ import { SortValueEnum, SortTypeEnum } from '../constants/sort';
 import { CategoryOtherEnum } from '../constants/categories';
 import { waitForApiStatus } from '../utils/apiUtils';
 import { WebRoutes } from '../constants/webRoutes';
+import { ApiEndpoints } from '../constants/apiEndpoints';
+import { mockProductsResponse } from '../utils/mockUtils';
 
 test.describe('Products', () => {
     test('Verify user can view product details', async ({ app }) => {
@@ -107,5 +109,15 @@ test.describe('Products', () => {
         await app.homePage.selectCategoryCheckbox(CategoryOtherEnum.SANDER);
         const productNames: string[] = await app.homePage.productName.allTextContents();
         expect(productNames.every(name => name.includes(CategoryOtherEnum.SANDER))).toBeTruthy();
+    });
+
+    test('Verify mock response with 20-th products', async ({ app }) => {
+        await app.page.route(
+            `${ApiEndpoints.ApiBase}${WebRoutes.Products}*`,
+            mockProductsResponse
+        );
+
+        await app.homePage.navigateTo(WebRoutes.Home);
+        await expect(app.homePage.productName).toHaveCount(20);
     });
 });
