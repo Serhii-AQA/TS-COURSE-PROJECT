@@ -1,19 +1,22 @@
 import { Locator } from '@playwright/test';
-import { BillingAddress } from '../checkoutPage';
 import { BasePage } from '../../basePage';
 
+export interface BillingAddress {
+	street: string;
+	city: string;
+	state: string;
+	country: string;
+	postcode: string;
+}
+
 export class BillingAddressStepComponent extends BasePage {
-	readonly streetInput: Locator = this.page.getByTestId('street');
-	readonly cityInput: Locator = this.page.getByTestId('city');
-	readonly stateInput: Locator = this.page.getByTestId('state');
-	readonly countryInput: Locator = this.page.getByTestId('country');
-	readonly zipCodeInput: Locator = this.page.getByTestId('postal_code');
+	readonly signInCircleIcon: Locator = this.page.getByText('2');
 	readonly streetField: Locator = this.page.getByTestId('street');
 	readonly cityField: Locator = this.page.getByTestId('city');
 	readonly stateField: Locator = this.page.getByTestId('state');
 	readonly countryField: Locator = this.page.getByTestId('country');
 	readonly postcodeField: Locator = this.page.getByTestId('postal_code');
-	readonly proceedToCheckout3Button: Locator = this.page.getByTestId('proceed-3');
+	readonly proceedToCheckoutButton: Locator = this.page.getByTestId('proceed-3');
 
 	async fillBillingAddress(billingAddress: BillingAddress): Promise<void> {
 		const { street, city, state, country, postcode } = billingAddress;

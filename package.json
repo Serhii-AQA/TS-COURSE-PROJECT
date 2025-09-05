@@ -9,7 +9,7 @@
     "auth:setup": "npx playwright test tests/auth.setup.spec.ts",
     "test:all": "npx playwright test",
     "test:all:headed": "npx playwright test --headed",
-    "test:spec": "npx playwright test product.spec.ts --headed",
+    "test:spec": "npx playwright test checkout.spec.ts --headed",
     "report": "playwright show-report"
   },
   "keywords": [],

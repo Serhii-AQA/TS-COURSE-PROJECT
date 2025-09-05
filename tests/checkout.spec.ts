@@ -3,10 +3,11 @@ import { WebRoutes } from '../constants/webRoutes';
 import { expect } from '@playwright/test';
 import { USER_NAME } from '../config/baseConfig';
 import { BillingAddressEnum } from '../constants/billing';
-import { BillingAddress, PaymentFields } from '../pages/checkout/checkoutPage';
 import { PaymentData, PaymentMethodEnum } from '../constants/payments';
 import { getFutureExpirationDate } from '../utils/dateUtils';
 import { AlertsEnum } from '../constants/alerts';
+import { BillingAddress } from '../pages/checkout/components/billingAddressStepComponent';
+import { PaymentFields } from '../pages/checkout/components/paymentStepComponent';
 
 const billingAddress: BillingAddress = {
     street: BillingAddressEnum.STREET,
@@ -45,14 +46,14 @@ test.describe('Checkout flow', () => {
             'User name is not visible',
         ).toHaveText(USER_NAME);
 
-        await apiLogIn.checkoutPage.proceedToCheckout2Button.click();
-        await expect(apiLogIn.checkoutPage.signInCircleIcon).toHaveCSS('background-color', 'rgb(51, 153, 51)');
+        await apiLogIn.checkoutPage.signInStep.proceedToCheckout();
+        await expect(apiLogIn.checkoutPage.billingAddressStep.signInCircleIcon).toHaveCSS('background-color', 'rgb(51, 153, 51)');
 
-        await apiLogIn.checkoutPage.fillBillingAddress(billingAddress);
-        await apiLogIn.checkoutPage.proceedToCheckout3Button.click();
-        await apiLogIn.checkoutPage.selectPaymentMethod(PaymentMethodEnum.CREDIT_CARD);
-        await apiLogIn.checkoutPage.fillPaymentData(creditCardData);
-        await apiLogIn.checkoutPage.finishButton.click();
+        await apiLogIn.checkoutPage.billingAddressStep.fillBillingAddress(billingAddress);
+        await apiLogIn.checkoutPage.billingAddressStep.proceedToCheckoutButton.click();
+        await apiLogIn.checkoutPage.paymentStep.selectPaymentMethod(PaymentMethodEnum.CREDIT_CARD);
+        await apiLogIn.checkoutPage.paymentStep.fillPaymentData(creditCardData);
+        await apiLogIn.checkoutPage.paymentStep.proceedToCheckout();
         await expect(apiLogIn.productDetailsPage.alertsComponent.paymentWasSuccessfulAlert).toHaveText(AlertsEnum.PAYMENT_WAS_SUCCESSFUL);
     });
 });
