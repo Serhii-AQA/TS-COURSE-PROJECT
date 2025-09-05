@@ -3,7 +3,7 @@ import { WebRoutes } from '../constants/webRoutes';
 import { expect } from '@playwright/test';
 import { USER_NAME } from '../config/baseConfig';
 import { BillingAddressEnum } from '../constants/billing';
-import { BillingAddress, PaymentFields } from '../pages/checkoutPage';
+import { BillingAddress, PaymentFields } from '../pages/checkout/checkoutPage';
 import { PaymentData, PaymentMethodEnum } from '../constants/payments';
 import { getFutureExpirationDate } from '../utils/dateUtils';
 import { AlertsEnum } from '../constants/alerts';
