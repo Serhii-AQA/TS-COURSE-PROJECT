@@ -1,5 +1,3 @@
-import { USER_EMAIL, USER_PASSWORD } from '../config/baseConfig';
-
 export interface UserLoginBody {
 	email: string;
 	password: string;

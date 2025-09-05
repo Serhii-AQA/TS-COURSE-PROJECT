@@ -1,6 +1,6 @@
 import { test as base, expect } from '@playwright/test';
 import { Application } from './pages/app';
-import { USER_EMAIL, USER_PASSWORD, WEB_URL } from './config/baseConfig';
+import { USER_EMAIL, USER_PASSWORD } from './config/baseConfig';
 import { UserLoginBody, UserLoginResponse } from './typings/user';
 import { ApiEndpoints } from './constants/apiEndpoints';
 import { WebRoutes } from './constants/webRoutes';
