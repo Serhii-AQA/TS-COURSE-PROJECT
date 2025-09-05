@@ -31,7 +31,7 @@ const loggedInUser = test.extend<MyFixtures>({
         });
         expect(response.ok()).toBeTruthy();
 
-        const responseBody: UserLoginResponse = await  response.json();
+        const responseBody= await  response.json() as UserLoginResponse;
         await page.goto(WebRoutes.Home, { waitUntil: 'commit' });
 
         await page.evaluate((token) => {
