@@ -1,6 +1,5 @@
-import { test } from '../fixtures';
+import { expect, loggedInUser as test } from '../fixtures';
 import { WebRoutes } from '../constants/webRoutes';
-import { expect } from '@playwright/test';
 import { USER_NAME } from '../config/baseConfig';
 import { BillingAddressEnum } from '../constants/billing';
 import { PaymentData, PaymentMethodEnum } from '../constants/payments';
@@ -25,35 +24,35 @@ const creditCardData: PaymentFields = {
 };
 
 test.describe('Checkout flow', () => {
-    test('checkout first product with credit card', async ({ apiLogIn }) => {
-        await apiLogIn.loginPage.navigateTo(WebRoutes.Home);
-        await apiLogIn.homePage.productsCard.first().click();
-        await apiLogIn.homePage.openProduct(1);
-        const productDetails = await apiLogIn.productDetailsPage.getProductInfo();
-        await apiLogIn.productDetailsPage.addToCartButton.click();
-        await apiLogIn.productDetailsPage.alertsComponent.productAddedAlert.click();
-        await apiLogIn.productDetailsPage.headerComponent.cartItem.click();
-        await expect(apiLogIn.checkoutPage.productTitle).toHaveText(productDetails.title);
+    test('checkout first product with credit card', async ({ app }) => {
+        await app.loginPage.navigateTo(WebRoutes.Home);
+        await app.homePage.productsCard.first().click();
+        await app.homePage.openProduct(1);
+        const productDetails = await app.productDetailsPage.getProductInfo();
+        await app.productDetailsPage.addToCartButton.click();
+        await app.productDetailsPage.alertsComponent.productAddedAlert.click();
+        await app.productDetailsPage.headerComponent.cartItem.click();
+        await expect(app.checkoutPage.productTitle).toHaveText(productDetails.title);
 
-        const productPrice: string = ( await apiLogIn.checkoutPage.productPrice.innerText() ).replace('$', '').trim();
+        const productPrice: string = ( await app.checkoutPage.productPrice.innerText() ).replace('$', '').trim();
         expect(productPrice).toEqual(productDetails.price);
 
-        const totalPrice: string = ( await apiLogIn.checkoutPage.totalPrice.innerText()).replace('$', '').trim();
+        const totalPrice: string = ( await app.checkoutPage.totalPrice.innerText()).replace('$', '').trim();
         expect(totalPrice).toEqual(productDetails.price);
 
-        await apiLogIn.checkoutPage.proceedToCheckoutButton.click();
-        await expect(apiLogIn.checkoutPage.headerComponent.accountName,
+        await app.checkoutPage.proceedToCheckoutButton.click();
+        await expect(app.checkoutPage.headerComponent.accountName,
             'User name is not visible',
         ).toHaveText(USER_NAME);
 
-        await apiLogIn.checkoutPage.signInStep.proceedToCheckout();
-        await expect(apiLogIn.checkoutPage.billingAddressStep.signInCircleIcon).toHaveCSS('background-color', 'rgb(51, 153, 51)');
+        await app.checkoutPage.signInStep.proceedToCheckout();
+        await expect(app.checkoutPage.billingAddressStep.signInCircleIcon).toHaveCSS('background-color', 'rgb(51, 153, 51)');
 
-        await apiLogIn.checkoutPage.billingAddressStep.fillBillingAddress(billingAddress);
-        await apiLogIn.checkoutPage.billingAddressStep.proceedToCheckoutButton.click();
-        await apiLogIn.checkoutPage.paymentStep.selectPaymentMethod(PaymentMethodEnum.CREDIT_CARD);
-        await apiLogIn.checkoutPage.paymentStep.fillPaymentData(creditCardData);
-        await apiLogIn.checkoutPage.paymentStep.proceedToCheckout();
-        await expect(apiLogIn.productDetailsPage.alertsComponent.paymentWasSuccessfulAlert).toHaveText(AlertsEnum.PAYMENT_WAS_SUCCESSFUL);
+        await app.checkoutPage.billingAddressStep.fillBillingAddress(billingAddress);
+        await app.checkoutPage.billingAddressStep.proceedToCheckoutButton.click();
+        await app.checkoutPage.paymentStep.selectPaymentMethod(PaymentMethodEnum.CREDIT_CARD);
+        await app.checkoutPage.paymentStep.fillPaymentData(creditCardData);
+        await app.checkoutPage.paymentStep.proceedToCheckout();
+        await expect(app.productDetailsPage.alertsComponent.paymentWasSuccessfulAlert).toHaveText(AlertsEnum.PAYMENT_WAS_SUCCESSFUL);
     });
 });

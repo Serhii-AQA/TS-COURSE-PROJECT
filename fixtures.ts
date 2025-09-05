@@ -1,40 +1,47 @@
-import { test as base } from '@playwright/test';
+import { test as base, expect } from '@playwright/test';
 import { Application } from './pages/app';
-import {  WEB_URL } from './config/baseConfig';
-import path from 'path';
-import fs from 'fs';
-
-type AuthData = {
-    token: string;
-};
+import { USER_EMAIL, USER_PASSWORD, WEB_URL } from './config/baseConfig';
+import { UserLoginBody, UserLoginResponse } from './typings/user';
+import { ApiEndpoints } from './constants/apiEndpoints';
+import { WebRoutes } from './constants/webRoutes';
 
 type MyFixtures = {
     app: Application;
-    apiLogIn: Application;
 };
 
-export const test = base.extend<MyFixtures>({
+const test = base.extend<MyFixtures>({
     app: async ({ page }, use) => {
         const app = new Application(page);
         await use(app);
     },
+});
 
-    apiLogIn: async ({ browser }, use) => {
-        const authFile = path.join(__dirname, './playwright/.auth/user.json');
-        const fileContent = fs.readFileSync(authFile, 'utf-8');
-        const parsed: AuthData = JSON.parse(fileContent) as AuthData;
+const loggedInUser = test.extend<MyFixtures>({
+    app: async ({ app, request, page }, use) => {
+        const { email, password }: UserLoginBody = {
+           email: USER_EMAIL,
+            password: USER_PASSWORD
+        };
 
-        const { token } = parsed;
+        const response = await request.post(`${ApiEndpoints.ApiBase}${WebRoutes.UsersLogin}`, {
+            data: {
+                email,
+                password,
+            }
+        });
+        expect(response.ok()).toBeTruthy();
 
-        const page = await browser.newPage();
-        await page.goto(WEB_URL);
+        const responseBody: UserLoginResponse = await  response.json();
+        await page.goto(WebRoutes.Home, { waitUntil: 'commit' });
+
         await page.evaluate((token) => {
-            localStorage.setItem('auth-token', token);
-        }, token);
+            return window.localStorage.setItem('auth-token', token);
+        }, responseBody.access_token);
 
-        const app = new Application(page);
+        await app.homePage.navigateTo(WebRoutes.Home);
+
         await use(app);
-
-        await app.page.close();
     },
 });
+
+export { test, expect, loggedInUser };
