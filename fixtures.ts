@@ -7,17 +7,16 @@ import { WebRoutes } from './constants/webRoutes';
 
 type MyFixtures = {
     app: Application;
+    loggedInUser: Application;
 };
 
-const test = base.extend<MyFixtures>({
+export const test = base.extend<MyFixtures>({
     app: async ({ page }, use) => {
         const app = new Application(page);
         await use(app);
     },
-});
 
-const loggedInUser = test.extend<MyFixtures>({
-    app: async ({ app, request, page }, use) => {
+    loggedInUser: async ({ app, request, page }, use) => {
         const { email, password }: UserLoginBody = {
            email: USER_EMAIL,
             password: USER_PASSWORD
@@ -43,5 +42,3 @@ const loggedInUser = test.extend<MyFixtures>({
         await use(app);
     },
 });
-
-export { test, expect, loggedInUser };
