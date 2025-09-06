@@ -3,4 +3,8 @@ export enum WebRoutes {
     Products = '/products',
     Checkout = '/checkout',
     UsersLogin = '/users/login',
+    AuthLogin = '/auth/login',
+    UsersRegister = '/users/register',
+    Account = '/account',
+    Users = '/users',
 }
