@@ -4,8 +4,8 @@ import { SortValueEnum, SortTypeEnum } from '../constants/sort';
 import { CategoryOtherEnum } from '../constants/categories';
 import { waitForApiStatus } from '../utils/apiUtils';
 import { WebRoutes } from '../constants/webRoutes';
-import { ApiEndpoints } from '../constants/apiEndpoints';
 import { mockProductsResponse } from '../utils/mockUtils';
+import { API_BASE_URL } from '../config/baseConfig';
 
 test.describe('Products', {
     tag: '@regression',
@@ -115,7 +115,7 @@ test.describe('Products', {
 
     test('Verify mock response with 20-th products', async ({ app }) => {
         await app.page.route(
-            `${ApiEndpoints.ApiBase}${WebRoutes.Products}*`,
+            `${API_BASE_URL}${WebRoutes.Products}*`,
             mockProductsResponse
         );
 

@@ -1,8 +1,7 @@
-import { USER_EMAIL, USER_PASSWORD } from '../config/baseConfig';
+import { API_BASE_URL, USER_EMAIL, USER_PASSWORD } from '../config/baseConfig';
 import path from 'path';
 import { test as setup } from '@playwright/test';
 import { WebRoutes } from '../constants/webRoutes';
-import { ApiEndpoints } from '../constants/apiEndpoints';
 import fs from 'fs';
 
 type LoginResponse = {
@@ -11,7 +10,7 @@ type LoginResponse = {
 const authFile = path.join(__dirname, '../playwright/.auth/user.json');
 
 setup('Authenticate and save token', async ({ request }) => {
-    const res = await request.post(`${ApiEndpoints.ApiBase}${WebRoutes.UsersLogin}`, {
+    const res = await request.post(`${API_BASE_URL}${WebRoutes.UsersLogin}`, {
         data: {
             email: USER_EMAIL,
             password: USER_PASSWORD,

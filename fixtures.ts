@@ -1,8 +1,7 @@
 import { test as base, expect } from '@playwright/test';
 import { Application } from './pages/app';
-import { USER_EMAIL, USER_PASSWORD } from './config/baseConfig';
+import { API_BASE_URL, USER_EMAIL, USER_PASSWORD } from './config/baseConfig';
 import { UserLoginBody, UserLoginResponse, UserRegisterBody, UserRegisterResponse } from './typings/user';
-import { ApiEndpoints } from './constants/apiEndpoints';
 import { WebRoutes } from './constants/webRoutes';
 import { userData } from './constants/user';
 
@@ -31,7 +30,7 @@ export const test = base.extend<MyFixtures>({
 			password: USER_PASSWORD
 		};
 
-		const response = await request.post(`${ApiEndpoints.ApiBase}${WebRoutes.UsersLogin}`, {
+		const response = await request.post(`${API_BASE_URL}${WebRoutes.UsersLogin}`, {
 			data: {
 				email,
 				password,
@@ -53,7 +52,7 @@ export const test = base.extend<MyFixtures>({
 
 	loggedInAsNewUser: async ({ app, request, page }, use) => {
 		const user = userData;
-		const createUserResponse = await request.post(`${ApiEndpoints.ApiBase}${WebRoutes.UsersRegister}`, {
+		const createUserResponse = await request.post(`${API_BASE_URL}${WebRoutes.UsersRegister}`, {
 			data: user,
 		});
 
@@ -68,7 +67,7 @@ export const test = base.extend<MyFixtures>({
 			},
 		);
 
-		const loginUserResponse = await request.post(`${ApiEndpoints.ApiBase}${WebRoutes.UsersLogin}`, {
+		const loginUserResponse = await request.post(`${API_BASE_URL}${WebRoutes.UsersLogin}`, {
 			data: {
 				email: user.email,
 				password: user.password,
@@ -94,7 +93,7 @@ export const test = base.extend<MyFixtures>({
 		});
 
 		// post condition
-		await request.delete(`${ApiEndpoints.ApiBase}${WebRoutes.Users}/${createUserResponseBody.id}`, {
+		await request.delete(`${API_BASE_URL}${WebRoutes.Users}/${createUserResponseBody.id}`, {
 			headers: {
 				Authorization: `Bearer ${loginUserResponseBody.access_token}`
 			}
