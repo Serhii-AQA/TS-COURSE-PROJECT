@@ -24,7 +24,9 @@ const creditCardData: PaymentFields = {
     cardHolderName: USER_NAME,
 };
 
-test.describe('Checkout flow', () => {
+test.describe('Checkout flow', {
+    tag: ['@regression', '@smoke'],
+},() => {
     test('checkout first product with credit card', async ({ loggedInUser }) => {
         await loggedInUser.loginPage.navigateTo(WebRoutes.Home);
         await loggedInUser.homePage.productsCard.first().click();

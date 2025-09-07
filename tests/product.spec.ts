@@ -7,7 +7,9 @@ import { WebRoutes } from '../constants/webRoutes';
 import { ApiEndpoints } from '../constants/apiEndpoints';
 import { mockProductsResponse } from '../utils/mockUtils';
 
-test.describe('Products', () => {
+test.describe('Products', {
+    tag: '@regression',
+},() => {
     test('Verify user can view product details', async ({ app }) => {
         const productTitle = 'Combination Pliers';
 
