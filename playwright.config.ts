@@ -53,6 +53,19 @@ export default defineConfig({
       },
       dependencies: ['setup'],
     },
+    {
+      name: 'smoke',
+      grep: /@smoke/,
+      use: { ...devices['Desktop Chrome'] },
+      dependencies: ['setup'],
+    },
+    {
+      name: 'regression',
+      grep: /@regression/,
+      use: { ...devices['Desktop Chrome'] },
+      dependencies: ['setup'],
+    },
+
 
     // {
     //   name: 'firefox',
