@@ -30,6 +30,7 @@ jobs:
         env:
           USER_EMAIL: ${{ secrets.USER_EMAIL }}
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+          TESTOMATIO: ${{ secrets.TESTOMATIO }}
           USER_NAME: ${{ vars.USER_NAME }}
           WEB_URL: ${{ vars.WEB_URL }}
           API_BASE_URL: ${{ vars.API_BASE_URL }}
