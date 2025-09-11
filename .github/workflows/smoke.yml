@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Playwright Smoke Tests
 
 on:
   push:
@@ -26,7 +26,7 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run Playwright tests
+      - name: Run Smoke tests
         env:
           USER_EMAIL: ${{ secrets.USER_EMAIL }}
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
@@ -34,11 +34,11 @@ jobs:
           USER_NAME: ${{ vars.USER_NAME }}
           WEB_URL: ${{ vars.WEB_URL }}
           API_BASE_URL: ${{ vars.API_BASE_URL }}
-        run: npx playwright test
+        run: npx playwright test --grep "@smoke"
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: playwright-smoke-report
           path: playwright-report/
           retention-days: 30

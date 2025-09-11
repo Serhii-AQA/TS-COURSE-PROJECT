@@ -9,5 +9,4 @@ export const enum PaymentMethodEnum {
 export const enum PaymentData {
 	CREDIT_CARD_NUMBER = '1111-1111-1111-1111',
 	CVV = '111',
-	// CARD_HOLDER_NAME = '111',
 }

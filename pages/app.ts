@@ -3,7 +3,7 @@ import { LoginPage } from './loginPage';
 import { AccountPage } from './accountPage';
 import { HomePage } from './homePage';
 import { ProductDetailsPage } from './productDetailsPage';
-import { CheckoutPage } from './checkoutPage';
+import { CheckoutPage } from './checkout/checkoutPage';
 
 export class Application {
     readonly page: Page;

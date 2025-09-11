@@ -1,40 +1,102 @@
-import { test as base } from '@playwright/test';
+import { test as base, expect } from '@playwright/test';
 import { Application } from './pages/app';
-import {  WEB_URL } from './config/baseConfig';
-import path from 'path';
-import fs from 'fs';
+import { API_BASE_URL, USER_EMAIL, USER_PASSWORD } from './config/baseConfig';
+import { UserLoginBody, UserLoginResponse, UserRegisterBody, UserRegisterResponse } from './typings/user';
+import { WebRoutes } from './constants/webRoutes';
+import { userData } from './constants/user';
 
-type AuthData = {
-    token: string;
-};
+interface UserContext {
+	user: {
+		userModel: UserRegisterBody; //user body
+		createdUser: UserRegisterResponse // register user response
+	}
+}
 
 type MyFixtures = {
-    app: Application;
-    apiLogIn: Application;
+	app: Application;
+	loggedInUser: Application;
+	loggedInAsNewUser: UserContext;
 };
 
 export const test = base.extend<MyFixtures>({
-    app: async ({ page }, use) => {
-        const app = new Application(page);
-        await use(app);
-    },
+	app: async ({ page }, use) => {
+		const app = new Application(page);
+		await use(app);
+	},
 
-    apiLogIn: async ({ browser }, use) => {
-        const authFile = path.join(__dirname, './playwright/.auth/user.json');
-        const fileContent = fs.readFileSync(authFile, 'utf-8');
-        const parsed: AuthData = JSON.parse(fileContent) as AuthData;
+	loggedInUser: async ({ app, request, page }, use) => {
+		const { email, password }: UserLoginBody = {
+			email: USER_EMAIL,
+			password: USER_PASSWORD
+		};
 
-        const { token } = parsed;
+		const response = await request.post(`${API_BASE_URL}${WebRoutes.UsersLogin}`, {
+			data: {
+				email,
+				password,
+			}
+		});
+		expect(response.ok()).toBeTruthy();
 
-        const page = await browser.newPage();
-        await page.goto(WEB_URL);
-        await page.evaluate((token) => {
-            localStorage.setItem('auth-token', token);
-        }, token);
+		const responseBody = await response.json() as UserLoginResponse;
+		await page.goto(WebRoutes.Home, { waitUntil: 'commit' });
 
-        const app = new Application(page);
-        await use(app);
+		await page.evaluate((token) => {
+			return window.localStorage.setItem('auth-token', token);
+		}, responseBody.access_token);
 
-        await app.page.close();
-    },
+		await app.homePage.navigateTo(WebRoutes.Home);
+
+		await use(app);
+	},
+
+	loggedInAsNewUser: async ({ app, request, page }, use) => {
+		const user = userData;
+		const createUserResponse = await request.post(`${API_BASE_URL}${WebRoutes.UsersRegister}`, {
+			data: user,
+		});
+
+		expect(createUserResponse.ok()).toBeTruthy();
+
+		const createUserResponseBody = await createUserResponse.json() as UserRegisterResponse;
+
+		await test.info().attach('Credentials used for user registration',
+			{
+				body: JSON.stringify(user, null, 4),
+				contentType: 'application/json'
+			},
+		);
+
+		const loginUserResponse = await request.post(`${API_BASE_URL}${WebRoutes.UsersLogin}`, {
+			data: {
+				email: user.email,
+				password: user.password,
+			}
+		});
+		expect(loginUserResponse.ok()).toBeTruthy();
+
+		const loginUserResponseBody = await loginUserResponse.json() as UserLoginResponse;
+
+		await page.goto(WebRoutes.Home, { waitUntil: 'commit' });
+
+		await page.evaluate((token) => {
+			return window.localStorage.setItem('auth-token', token);
+		}, loginUserResponseBody.access_token);
+
+		await app.homePage.navigateTo(WebRoutes.Home);
+
+		await use({
+			user: {
+				userModel: user,
+				createdUser: createUserResponseBody,
+			}
+		});
+
+		// post condition
+		await request.delete(`${API_BASE_URL}${WebRoutes.Users}/${createUserResponseBody.id}`, {
+			headers: {
+				Authorization: `Bearer ${loginUserResponseBody.access_token}`
+			}
+		});
+	},
 });

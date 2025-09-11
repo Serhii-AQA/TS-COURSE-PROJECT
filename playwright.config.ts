@@ -1,5 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-import { WEB_URL } from './config/baseConfig';
+import { TESTOMATIO, WEB_URL } from './config/baseConfig';
 
 /**
  * Read environment variables from file.
@@ -23,15 +23,26 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+      ['html', { open: 'on-failure' }],
+      ['dot'],
+      ['json', { outputFile: 'results.json' }],
+    [
+      './node_modules/@testomatio/reporter/lib/adapter/playwright.js',
+      {
+        apiKey: TESTOMATIO,
+      },
+    ],
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: WEB_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'retain-on-failure',
+    trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    video: 'on-first-retry',
     testIdAttribute: 'data-test',
     headless: true,
   },
@@ -53,6 +64,19 @@ export default defineConfig({
       },
       dependencies: ['setup'],
     },
+    {
+      name: 'smoke',
+      grep: /@smoke/,
+      use: { ...devices['Desktop Chrome'] },
+      dependencies: ['setup'],
+    },
+    {
+      name: 'regression',
+      grep: /@regression/,
+      use: { ...devices['Desktop Chrome'] },
+      dependencies: ['setup'],
+    },
+
 
     // {
     //   name: 'firefox',
